@@ -1,0 +1,12 @@
+.done {
+    text-decoration: line-through;
+}
+
+li {
+    list-style-type: none
+}
+
+.list {
+    border: 1px solid #635f5f;
+    margin-top: 30px;
+}
