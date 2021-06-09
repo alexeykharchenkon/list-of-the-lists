@@ -1,10 +1,10 @@
-import { Todo } from "./Todo";
-import { Title } from "./Title";
+import { TodoType } from "./TodoType";
+import { TitleType } from "./TitleType";
 
-export interface List {
+export interface ListType {
     id: string;
-    title: Title[];
-    todos: Todo[];
+    title: TitleType[];
+    todos: TodoType[];
     addTodoValue: string;
     editMode: boolean;
     editTodoId: string;

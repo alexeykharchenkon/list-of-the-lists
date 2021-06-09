@@ -1,11 +1,11 @@
 import { makeAutoObservable } from "mobx";
-import { Todo } from "../models/Todo";
-import { List } from "../models/List";
-import { Title } from "../models/Title";
+import { TodoType } from "../models/TodoType";
+import { ListType } from "../models/ListType";
+import { TitleType } from "../models/TitleType";
 import { Guid } from "guid-typescript";
 
 export default class TodoStore {
-    lists: List[] = []; 
+    lists: ListType[] = []; 
 
     constructor(){
         makeAutoObservable(this)
@@ -13,43 +13,43 @@ export default class TodoStore {
 
     loadTodos = () => {
 
-        this.lists = JSON.parse(localStorage.getItem("lists") || "[]");
-        if(this.lists.length == 0) { 
+     //   this.lists = JSON.parse(localStorage.getItem("lists") || "[]");
+     /*   if(this.lists.length === 0) { 
 
-            let todo1: Todo = {id: Guid.create().toString(), title: '1a', done: false, checked: ""};
-            let todo2: Todo = {id: Guid.create().toString(), title: '2a', done: true, checked: "done"};
-            let todo3: Todo = {id: Guid.create().toString(), title: '3a', done: false, checked: ""};
+            let todo1: TodoType = {id: Guid.create().toString(), title: '1a', done: false, checked: ""};
+            let todo2: TodoType = {id: Guid.create().toString(), title: '2a', done: true, checked: "done"};
+            let todo3: TodoType = {id: Guid.create().toString(), title: '3a', done: false, checked: ""};
             
-            let todos1 : Todo[] = [];
-            let todos2 : Todo[] = [];
+            let todos1 : TodoType[] = [];
+            let todos2 : TodoType[] = [];
 
             todos1.push(todo1);
             todos1.push(todo2);
             todos2.push(todo3);
 
-            let titl1: Title = {id: Guid.create().toString(), title: 'List number 1'}
-            let titl2: Title = {id: Guid.create().toString(), title: 'List number 2'}
-            let titl3: Title = {id: Guid.create().toString(), title: 'First List'}
+            let titl1: TitleType = {id: Guid.create().toString(), title: 'List number 1'}
+            let titl2: TitleType = {id: Guid.create().toString(), title: 'List number 2'}
+            let titl3: TitleType = {id: Guid.create().toString(), title: 'First List'}
 
-            let titles1 : Title[] = [];
-            let titles2 : Title[] = [];
+            let titles1 : TitleType[] = [];
+            let titles2 : TitleType[] = [];
 
             titles1.push(titl1);
             titles1.push(titl3);
             titles2.push(titl2);
 
-            let list1: List = {id: Guid.create().toString(), title: titles1, todos: todos1, addTodoValue: "sdsdf", editMode: false, editTodoId: "", editTodoValue: "", editTitleMode: false, editTitleId: "", editTitleValue: "", addTitleValue: ""};
-            let list2: List = {id: Guid.create().toString(), title: titles2, todos: todos2, addTodoValue: "", editMode: false, editTodoId: "", editTodoValue: "", editTitleMode: false, editTitleId: "", editTitleValue: "", addTitleValue: ""};
+            let list1: ListType = {id: Guid.create().toString(), title: titles1, todos: todos1, addTodoValue: "sdsdf", editMode: false, editTodoId: "", editTodoValue: "", editTitleMode: false, editTitleId: "", editTitleValue: "", addTitleValue: ""};
+            let list2: ListType = {id: Guid.create().toString(), title: titles2, todos: todos2, addTodoValue: "", editMode: false, editTodoId: "", editTodoValue: "", editTitleMode: false, editTitleId: "", editTitleValue: "", addTitleValue: ""};
             this.lists.push(list1);
             this.lists.push(list2);
-        }
+        }*/
     }
 
     checkTodo = (id: string, listId: string) => {
        
        this.lists.map(list => {
            if (list.id === listId) {
-                let newTodo: Todo = {id: "", title: "", done: false, checked: ""};
+                let newTodo: TodoType = {id: "", title: "", done: false, checked: ""};
                 list.todos.map(todo => {
                     if(todo.id === id){
                         newTodo.done = todo.done = !todo.done;
@@ -80,7 +80,7 @@ export default class TodoStore {
     addTodo = (listId: string) => {
         this.lists.map(list => {
             if (list.id === listId) {
-                let newTodo: Todo = {id: Guid.create().toString(), title: list.addTodoValue, done: false, checked: ""};
+                let newTodo: TodoType = {id: Guid.create().toString(), title: list.addTodoValue, done: false, checked: ""};
                 list.todos.push(newTodo);
                 list.addTodoValue = "";
             }
@@ -143,7 +143,7 @@ export default class TodoStore {
         this.lists.map(list => {
             if (list.id === listId) {
                 list.title.map(t=> {if(t.id === list.editTitleId)t.title = list.editTitleValue;});
-                list.editMode = false;
+                list.editTitleMode = false;
             }});
             localStorage.setItem("lists", JSON.stringify(this.lists));
     }
@@ -159,9 +159,18 @@ export default class TodoStore {
     addTitle = (listId: string) => {
         this.lists.map(list => {
             if (list.id === listId) {
-                let tit: Title = {id: Guid.create().toString(), title: list.addTitleValue};
+                let tit: TitleType = {id: Guid.create().toString(), title: list.addTitleValue};
                 list.title.push(tit);
                 list.addTitleValue = "";
+            }
+        });
+        localStorage.setItem("lists", JSON.stringify(this.lists));
+    }
+
+    deleteTitle = (id: string, listId: string) => {
+        this.lists.map(list => {
+            if (list.id === listId) {
+                list.title = list.title.filter(t => t.id !== id);
             }
         });
         localStorage.setItem("lists", JSON.stringify(this.lists));
@@ -173,6 +182,29 @@ export default class TodoStore {
                 list.addTitleValue = event.target.value;
             }
         });
+    }
+
+    addList = () => {  
+        let todos1 : TodoType[] = [];
+        let titles1 : TitleType[] = [];
+
+        let list1: ListType = {
+            id: Guid.create().toString(), 
+            title: titles1, 
+            todos: todos1, 
+            addTodoValue: "", 
+            editMode: false, 
+            editTodoId: "", 
+            editTodoValue: "", 
+            editTitleMode: false, 
+            editTitleId: "", 
+            editTitleValue: "", 
+            addTitleValue: ""
+        };
+       
+        this.lists.push(list1);
+
+        localStorage.setItem("lists", JSON.stringify(this.lists));
     }
 
    
