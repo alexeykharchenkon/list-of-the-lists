@@ -74,6 +74,7 @@ export default class TodoStore {
                 list.todos = list.todos.filter(todo => todo.id !== id);
             }
         });
+        localStorage.setItem("lists", JSON.stringify(this.lists));
     }
 
     addTodo = (listId: string) => {
