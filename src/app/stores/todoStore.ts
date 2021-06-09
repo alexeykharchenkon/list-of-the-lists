@@ -2,6 +2,7 @@ import { makeAutoObservable } from "mobx";
 import { Todo } from "../models/Todo";
 import { List } from "../models/List";
 import { Title } from "../models/Title";
+import { Guid } from "guid-typescript";
 
 export default class TodoStore {
     lists: List[] = []; 
@@ -15,9 +16,9 @@ export default class TodoStore {
         this.lists = JSON.parse(localStorage.getItem("lists") || "[]");
         if(this.lists.length == 0) { 
 
-            let todo1: Todo = {id: '1', title: '1a', done: false, checked: ""};
-            let todo2: Todo = {id: '2', title: '2a', done: true, checked: "done"};
-            let todo3: Todo = {id: '3', title: '3a', done: false, checked: ""};
+            let todo1: Todo = {id: Guid.create().toString(), title: '1a', done: false, checked: ""};
+            let todo2: Todo = {id: Guid.create().toString(), title: '2a', done: true, checked: "done"};
+            let todo3: Todo = {id: Guid.create().toString(), title: '3a', done: false, checked: ""};
             
             let todos1 : Todo[] = [];
             let todos2 : Todo[] = [];
@@ -26,9 +27,9 @@ export default class TodoStore {
             todos1.push(todo2);
             todos2.push(todo3);
 
-            let titl1: Title = {id: '1', title: 'List number 1'}
-            let titl2: Title = {id: '2', title: 'List number 2'}
-            let titl3: Title = {id: '3', title: 'First List'}
+            let titl1: Title = {id: Guid.create().toString(), title: 'List number 1'}
+            let titl2: Title = {id: Guid.create().toString(), title: 'List number 2'}
+            let titl3: Title = {id: Guid.create().toString(), title: 'First List'}
 
             let titles1 : Title[] = [];
             let titles2 : Title[] = [];
@@ -37,8 +38,8 @@ export default class TodoStore {
             titles1.push(titl3);
             titles2.push(titl2);
 
-            let list1: List = {id: '1', title: titles1, todos: todos1, addTodoValue: "sdsdf", editMode: false, editTodoId: "", editTodoValue: "", editTitleMode: false, editTitleId: "", editTitleValue: "", addTitleValue: ""};
-            let list2: List = {id: '2', title: titles2, todos: todos2, addTodoValue: "", editMode: false, editTodoId: "", editTodoValue: "", editTitleMode: false, editTitleId: "", editTitleValue: "", addTitleValue: ""};
+            let list1: List = {id: Guid.create().toString(), title: titles1, todos: todos1, addTodoValue: "sdsdf", editMode: false, editTodoId: "", editTodoValue: "", editTitleMode: false, editTitleId: "", editTitleValue: "", addTitleValue: ""};
+            let list2: List = {id: Guid.create().toString(), title: titles2, todos: todos2, addTodoValue: "", editMode: false, editTodoId: "", editTodoValue: "", editTitleMode: false, editTitleId: "", editTitleValue: "", addTitleValue: ""};
             this.lists.push(list1);
             this.lists.push(list2);
         }
@@ -78,7 +79,7 @@ export default class TodoStore {
     addTodo = (listId: string) => {
         this.lists.map(list => {
             if (list.id === listId) {
-                let newTodo: Todo = {id: (list.todos.length + 1).toString(), title: list.addTodoValue, done: false, checked: ""};
+                let newTodo: Todo = {id: Guid.create().toString(), title: list.addTodoValue, done: false, checked: ""};
                 list.todos.push(newTodo);
                 list.addTodoValue = "";
             }
@@ -157,7 +158,7 @@ export default class TodoStore {
     addTitle = (listId: string) => {
         this.lists.map(list => {
             if (list.id === listId) {
-                let tit: Title = {id: (list.title.length + 1).toString(), title: list.addTitleValue};
+                let tit: Title = {id: Guid.create().toString(), title: list.addTitleValue};
                 list.title.push(tit);
                 list.addTitleValue = "";
             }
