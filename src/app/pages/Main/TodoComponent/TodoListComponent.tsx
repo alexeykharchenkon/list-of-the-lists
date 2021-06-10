@@ -1,11 +1,11 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { useStore } from '../../../stores/store';
+import { useStore } from '../../../stores/rootStore';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
-import { TodoType } from "../../../models/TodoType";
+import { Todo } from "../../../common/models/Todo";
 import { makeStyles } from '@material-ui/core/styles';
 import '../../../styles.css'
 
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 interface CProps {
-    todo: TodoType;
+    todo: Todo;
     listId: string;
 }
 

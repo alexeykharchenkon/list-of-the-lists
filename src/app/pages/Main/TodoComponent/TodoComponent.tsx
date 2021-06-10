@@ -1,10 +1,11 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { useStore } from '../../../stores/rootStore';
 import Container from '@material-ui/core/Container';
-import { ListType } from "../../../models/ListType";
+import { TodoList } from "../../../common/models/TodoList";
 import { List, ListItem} from '@material-ui/core';
-import TodoList from './TodoList'
+import TodoListComponent from './TodoListComponent'
 import EditTodo from './EditTodo'
 import AddTodo from './AddTodo'
 
@@ -28,22 +29,23 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 interface CProps {
-    list: ListType;
+    list: TodoList;
 }
 
 function TodoComponent({list} : CProps) {
     const classes = useStyles();
+    const { todoStore} = useStore();
 
     return (
         <Container className={classes.root}>
             <h2>List Todos</h2>
-            <AddTodo list={list}/>
-            {list.editMode && <EditTodo list={list}/>}
+            {!todoStore.editMode && <AddTodo list={list}/> }
+            {todoStore.editMode && <EditTodo list={list}/> }
             <List className={classes.list}>
                 {list.todos.map(todo => {
                     return (
                         <ListItem key={todo.id} className={classes.listitem}>
-                            <TodoList todo={todo} listId={list.id}/>
+                            <TodoListComponent todo={todo} listId={list.id}/>
                         </ListItem>
                     );
                 })}

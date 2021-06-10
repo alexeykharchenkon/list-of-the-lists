@@ -2,55 +2,33 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import { ListType } from "../../../models/ListType";
+import { TodoList } from "../../../common/models/TodoList";
 import AddTitle from './AddTitle'
-import EditTitle from './EditTitle'
-import TitlesList from './TitlesList'
+import { useStore } from '../../../stores/rootStore';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         background: '#dbebeb',
         display: 'flex',
         justifyContent: 'space-between',
-        flexDirection: 'column',
-        marginBottom: '15px',
-    },
-    list: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-    },
-    listitem: {
-        display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        marginBottom: '15px',
+        alignItems: 'center',
     },
   }));
 
 interface CProps {
-    list: ListType;
+    list: TodoList;
 }
 
 function TitleComponent({list} : CProps) {
     const classes = useStyles();
+    const { listStore} = useStore();
 
     return (
         <Container className={classes.root}>
-            <h2>List Titles</h2>
-            <AddTitle list={list}/>
-            {list.editTitleMode && <Container><EditTitle list={list}/></Container>}
-             
-            <List className={classes.list}>
-                {list.title.map(tit => {
-                    return(
-                        <ListItem key={tit.id} className={classes.listitem}>
-                            <TitlesList titleId={tit.id} listId={list.id} title={tit.title}/>
-                         </ListItem>
-                    );     
-                })}
-            </List>
+            <h2>{list.title}</h2>
+            {listStore.titleCreateMode && !list.title && <AddTitle list={list}/>}
         </Container>
     );
 }

@@ -1,23 +1,27 @@
 import { makeAutoObservable } from "mobx";
-import { TodoType } from "../models/TodoType";
+import { Todo } from "../common/models/Todo";
 import { Guid } from "guid-typescript";
-import RootStore from "./rootStore";
-import service from '../services/service'
-
+import ListStore from "./listStore";
+import listService from '../services/ListService'
 
 export default class TodoStore {
-    rootStore: RootStore;
-    constructor(rootStore: RootStore){
-        this.rootStore = rootStore;
+    listStore: ListStore;
+
+    addTodoValue = "";
+    editTodoValue = "";
+    editMode = false;
+    editTodoId = "";
+    
+    constructor(listStore: ListStore){
+        this.listStore = listStore;
         makeAutoObservable(this)
     }
 
-    checkTodo = (id: string, listId: string) => {
-          
-        this.rootStore.lists.map(list => {
+    checkTodo = (id: string, listId: string) => {       
+        this.listStore.lists.forEach(list => {
             if (list.id === listId) {
-                 let newTodo: TodoType = {id: "", title: "", done: false, checked: ""};
-                 list.todos.map(todo => {
+                 let newTodo: Todo = {id: "", title: "", done: false, checked: ""};
+                 list.todos.forEach(todo => {
                      if(todo.id === id){
                          newTodo.done = todo.done = !todo.done;
                          newTodo.checked = todo.checked = todo.done ? "done": "";
@@ -32,65 +36,69 @@ export default class TodoStore {
             }
         })    
         
-        service.Lists.save(this.rootStore.lists);
+        listService.AllLists.save(this.listStore.lists);
      }
 
     deleteTodo = (id: string, listId: string) => {
-        this.rootStore.lists.map(list => {
+        this.listStore.lists.forEach(list => {
             if (list.id === listId) {
                 list.todos = list.todos.filter(todo => todo.id !== id);
             }
         });
-        service.Lists.save(this.rootStore.lists);
+        listService.AllLists.save(this.listStore.lists);
     }
 
     addTodo = (listId: string) => {
-        this.rootStore.lists.map(list => {
+        this.listStore.lists.forEach(list => {
             if (list.id === listId) {
-                let newTodo: TodoType = {id: Guid.create().toString(), title: list.addTodoValue, done: false, checked: ""};
+                let newTodo: Todo = {id: Guid.create().toString(), title: this.addTodoValue, done: false, checked: ""};
                 list.todos.push(newTodo);
-                list.addTodoValue = "";
+                this.addTodoValue = "";
             }
         });
-        service.Lists.save(this.rootStore.lists);
-    }
-
-    addTodoValueChange = (event: any) => {
-        this.rootStore.lists.map(list => {
-            if (list.id === event.target.id) {
-                list.addTodoValue = event.target.value;
-            }
-        });
-    }
+        listService.AllLists.save(this.listStore.lists);
+    } 
 
     editTodo = (id: string, listId: string) => {
-        this.rootStore.lists.map(list => {
+        this.listStore.lists.forEach(list => {
             if (list.id === listId) {
-                list.editMode = true;
-                list.editTodoId = id;
-                list.editTodoValue = list.todos.filter(todo => todo.id === id)[0].title;
+                this.editMode = true;
+                this.editTodoId = id;
+                this.editTodoValue = list.todos.filter(todo => todo.id === id)[0].title;
             }
         });
+
+        this.editMode = true;
     }
 
     editTodoValueSave = (listId: string) => {
-        this.rootStore.lists.map(list => {
+        this.listStore.lists.forEach(list => {
             if (list.id === listId) {
-                list.todos.map(todo => 
+                list.todos.forEach(todo => 
                     {
-                        if(todo.id === list.editTodoId) {
-                            todo.title = list.editTodoValue;
+                        if(todo.id === this.editTodoId) {
+                            todo.title = this.editTodoValue;
                         }
                     });
-                list.editMode = false;
+                this.editMode = false;
             }});
-            service.Lists.save(this.rootStore.lists);
+            listService.AllLists.save(this.listStore.lists);
+
+            this.editMode = false;
     }
 
     editTodoValueChange = (event: any) => {
-        this.rootStore.lists.map(list => {
+        this.listStore.lists.forEach(list => {
             if (list.id === event.target.id) {
-                list.editTodoValue = event.target.value;
+                this.editTodoValue = event.target.value;
+            }
+        });
+    }
+
+    addTodoValueChange = (event: any) => {
+        this.listStore.lists.forEach(list => {
+            if (list.id === event.target.id) {
+                this.addTodoValue = event.target.value;
             }
         });
     }

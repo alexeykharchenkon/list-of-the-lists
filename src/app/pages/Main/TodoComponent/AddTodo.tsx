@@ -1,13 +1,13 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { useStore } from '../../../stores/store';
+import { useStore } from '../../../stores/rootStore';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
-import { ListType } from "../../../models/ListType";
+import { TodoList } from "../../../common/models/TodoList";
 
 interface CProps {
-    list: ListType;
+    list: TodoList;
 }
 
 function AddTodo({list} : CProps) {
@@ -18,7 +18,7 @@ function AddTodo({list} : CProps) {
             <TextField 
                 id={list.id} 
                 label="Add Todo Here" 
-                value={list.addTodoValue}
+                value={todoStore.addTodoValue}
                 onChange={todoStore.addTodoValueChange}
             />
             <Button

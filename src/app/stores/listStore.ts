@@ -1,47 +1,37 @@
 import { makeAutoObservable } from "mobx";
-import { TodoType } from "../models/TodoType";
-import { ListType } from "../models/ListType";
-import { TitleType } from "../models/TitleType";
+import { Todo} from "../common/models/Todo";
+import { TodoList } from "../common/models/TodoList";
 import { Guid } from "guid-typescript";
-import RootStore from "./rootStore";
-import service from '../services/service'
-
+import listService from '../services/ListService'
 
 export default class ListStore {
-    rootStore: RootStore;
-    constructor(rootStore: RootStore){
-        this.rootStore = rootStore;
+    lists: TodoList[] = []; 
+    titleCreateMode = true;
+
+    constructor(){
         makeAutoObservable(this)
     }
  
     deleteList = (listId: string) => {
-        this.rootStore.lists = this.rootStore.lists.filter(list => list.id !== listId);
-        service.Lists.save(this.rootStore.lists);
+        this.lists = this.lists.filter(list => list.id !== listId);
+        listService.AllLists.save(this.lists);
     }
 
     addList = () => {  
-        let todos : TodoType[] = [];
-        let titles : TitleType[] = [];
-        let lists : ListType[] = [];
+        this.titleCreateMode = true;
 
-        let list1: ListType = {
+        let todos : Todo[] = [];
+        let lists : TodoList[] = [];
+
+        let list1: TodoList = {
             id: Guid.create().toString(), 
-            title: titles, 
+            title: "", 
             todos: todos, 
-            addTodoValue: "", 
-            editMode: false, 
-            editTodoId: "", 
-            editTodoValue: "", 
-            editTitleMode: false, 
-            editTitleId: "", 
-            editTitleValue: "", 
-            addTitleValue: ""
         };
 
         lists.push(list1);
-        this.rootStore.lists = lists.concat(this.rootStore.lists);
-
-        service.Lists.save(this.rootStore.lists);
+        this.lists = lists.concat(this.lists);
+        listService.AllLists.save(this.lists);
     }
 
     loadLists = () => {
