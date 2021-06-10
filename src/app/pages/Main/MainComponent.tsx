@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { useStore } from '../../stores/rootStore';
+import { useStore } from '../../stores/store';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -20,18 +20,18 @@ const useStyles = makeStyles((theme) => ({
 
 function MainComponent() {
     const classes = useStyles();
-    const { todoStore} = useStore();
+    const { rootStore, listStore } = useStore();
 
     return (
         <Container className={classes.root}>
             <Button
                 variant="contained"
                 color="primary"
-                onClick={() => todoStore.addList()}
+                onClick={() => listStore.addList()}
             > Add New List
             </Button> 
             <List>
-                {todoStore.lists.map(list => {
+                {rootStore.lists.map(list => {
                     return (
                         <ListItem key={list.id}>
                             <ListComponent list={list} />

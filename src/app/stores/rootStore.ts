@@ -1,16 +1,10 @@
-import { createContext, useContext } from "react";
-import TodoStore from "./todoStore";
+import { makeAutoObservable } from "mobx";
+import { ListType } from "../models/ListType";
 
-interface RootStore {
-    todoStore: TodoStore
-}
+export default class RootStore {
+    lists: ListType[] = []; 
 
-export const rootStore: RootStore = {
-    todoStore: new TodoStore()
-}
-
-export const StoreContext = createContext(rootStore)
-
-export function useStore() {
-    return useContext(StoreContext);
+    constructor(){
+        makeAutoObservable(this)
+    }
 }

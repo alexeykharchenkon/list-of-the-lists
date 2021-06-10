@@ -5,7 +5,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import { ListType } from "../../../models/ListType";
-import { useStore } from '../../../stores/rootStore';
 import AddTitle from './AddTitle'
 import EditTitle from './EditTitle'
 import TitlesList from './TitlesList'
@@ -36,7 +35,6 @@ interface CProps {
 
 function TitleComponent({list} : CProps) {
     const classes = useStyles();
-    const { todoStore} = useStore();
 
     return (
         <Container className={classes.root}>

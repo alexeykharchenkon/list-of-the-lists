@@ -1,6 +1,5 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { useStore } from '../../../stores/rootStore';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { ListType } from "../../../models/ListType";
@@ -34,7 +33,6 @@ interface CProps {
 
 function TodoComponent({list} : CProps) {
     const classes = useStyles();
-    const { todoStore } = useStore();
 
     return (
         <Container className={classes.root}>

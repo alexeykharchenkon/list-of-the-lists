@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { useStore } from '../../../stores/rootStore';
+import { useStore } from '../../../stores/store';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
@@ -28,7 +28,7 @@ interface CProps {
 
 function TitlesList({listId, titleId, title} : CProps) {
     const classes = useStyles();
-    const { todoStore} = useStore();
+    const { titleStore} = useStore();
 
     return (
         <Container className={classes.root}>
@@ -39,12 +39,12 @@ function TitlesList({listId, titleId, title} : CProps) {
                 <Button
                     color="primary"
                     style={{marginLeft: '10px'}}
-                     onClick={() => todoStore.editTitle(titleId, listId)}
+                     onClick={() => titleStore.editTitle(titleId, listId)}
                 > Edit </Button>
                  <Button
                     color="secondary"
                     style={{marginLeft: '10px'}}
-                    onClick={() => todoStore.deleteTitle(titleId, listId)}
+                    onClick={() => titleStore.deleteTitle(titleId, listId)}
                  > Delete </Button>
              </Container>
         </Container>

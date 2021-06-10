@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { useStore } from '../../../stores/rootStore';
+import { useStore } from '../../../stores/store';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
@@ -11,19 +11,19 @@ interface CProps {
 }
 
 function EditTitle({list} : CProps) {
-    const { todoStore} = useStore();
+    const { titleStore} = useStore();
 
     return (
         <Container>
             <TextField 
                 id={list.id}
                 value={list.editTitleValue}
-                onChange={todoStore.editTitleValueChange}
+                onChange={titleStore.editTitleValueChange}
             />
             <Button
                 variant="contained"
                 color="primary"
-                onClick={() => todoStore.editTitleValueSave(list.id)}
+                onClick={() => titleStore.editTitleValueSave(list.id)}
             >Save</Button>      
         </Container>
     );

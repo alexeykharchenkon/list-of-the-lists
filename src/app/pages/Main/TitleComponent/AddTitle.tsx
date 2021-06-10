@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { useStore } from '../../../stores/rootStore';
+import { useStore } from '../../../stores/store';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
@@ -11,7 +11,7 @@ interface CProps {
 }
 
 function AddTitle({list} : CProps) {
-    const { todoStore} = useStore();
+    const { titleStore} = useStore();
 
     return (
         <Container>
@@ -19,12 +19,12 @@ function AddTitle({list} : CProps) {
                 id={list.id} 
                 label="Add List Title" 
                 value={list.addTitleValue}
-                onChange={todoStore.addTitleValueChange}
+                onChange={titleStore.addTitleValueChange}
             />
             <Button
                 variant="contained"
                 color="primary"
-                onClick={() => todoStore.addTitle(list.id)}
+                onClick={() => titleStore.addTitle(list.id)}
             > Add </Button>  
         </Container>
     );

@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { useStore } from '../../../stores/rootStore';
+import { useStore } from '../../../stores/store';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
@@ -37,7 +37,7 @@ interface CProps {
 
 function ListComponent({list} : CProps) {
     const classes = useStyles();
-    const { todoStore} = useStore();
+    const { listStore} = useStore();
 
     return (
         <Container className={classes.root}>
@@ -49,7 +49,7 @@ function ListComponent({list} : CProps) {
                     <Button
                         variant="contained"
                         color="secondary"
-                        onClick={() => todoStore.deleteList(list.id)}
+                        onClick={() => listStore.deleteList(list.id)}
                      > Delete List </Button>
                 </Container> 
             </Container>

@@ -1,18 +1,18 @@
 import { Container } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
 import React, { useEffect } from 'react';
-import { useStore } from './stores/rootStore';
+import { useStore } from './stores/store';
 import AboutComponent from './pages/About/AboutComponent';
 import { Route } from "react-router-dom";
 import MainComponent from './pages/Main/MainComponent';
 import NavBar from './features/Navbar';
 
 function App() {
-  const {todoStore} = useStore();
+  const {listStore} = useStore();
 
   useEffect( () => {
-      todoStore.loadTodos();
-  }, [todoStore])
+      listStore.loadLists();
+  }, [listStore])
 
   return (
     <>
