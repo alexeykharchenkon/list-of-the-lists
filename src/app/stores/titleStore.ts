@@ -12,13 +12,9 @@ export default class TitleStore {
     }
 
     addTitle = (listId: string) => {
-        this.listStore.lists.forEach(list => {
-            if (list.id === listId) {
-                list.title = this.titleValue;
-                this.listStore.titleCreateMode = false;
-            }
-        });
-
+        this.listStore.lists.filter(list => list.id === listId).
+        forEach(list=> { list.title = this.titleValue;})
+        
         this.listStore.titleCreateMode = false;
         this.titleValue = "";
 
