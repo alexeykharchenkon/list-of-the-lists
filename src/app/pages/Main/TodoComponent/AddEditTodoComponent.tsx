@@ -3,26 +3,27 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
-import { TitleProps } from "../../../common/models/Props/TitleProps";
+import { TodoProps } from "../../../common/models/Props/TodoProps";
 import { useStyles } from "../../../common/styles/styles"
 
-function AddTitle({list, titleValue, addTitle, valueOnChange} : TitleProps) {
+
+function AddTodo({list, todoValue, addOrEditTodo, valueOnChange, buttonText} : TodoProps) {
     const classes = useStyles();
 
     return (
-        <Container className={classes.addtitleCo}>
+        <Container  className={classes.addEditCo}>
             <TextField 
-                label="Add List Title" 
-                value={titleValue}
+                label="Add Todo Title" 
+                value={todoValue}
                 onChange={e => valueOnChange(e.target.value, list.id)}
             />
             <Button
                 variant="contained"
                 color="primary"
-                onClick={() => addTitle(list.id)}
-            > Save </Button>  
+                onClick={() => addOrEditTodo(list.id)}
+            > {buttonText}</Button>      
         </Container>
     );
 }
 
-export default observer(AddTitle);
+export default observer(AddTodo);

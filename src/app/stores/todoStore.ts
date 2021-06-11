@@ -1,5 +1,4 @@
 import { makeAutoObservable } from "mobx";
-import { Todo } from "../common/models/Todo";
 import { Guid } from "guid-typescript";
 import ListStore from "./listStore";
 import listService from '../services/ListService'
@@ -7,91 +6,71 @@ import listService from '../services/ListService'
 export default class TodoStore {
     listStore: ListStore;
 
-    todoValue = "";
+    todoValue: string = "";
     editMode = false;
-    todoId = "";
+    todoId: string = "";
     
     constructor(listStore: ListStore){
         this.listStore = listStore;
         makeAutoObservable(this)
     }
 
-    checkTodo = (id: string, listId: string) => {       
-        this.listStore.lists.forEach(list => {
-            if (list.id === listId) {
-                 let newTodo: Todo = {id: "", title: "", done: false, checked: ""};
-                 list.todos.forEach(todo => {
-                     if(todo.id === id){
-                         newTodo.done = todo.done = !todo.done;
-                         newTodo.checked = todo.checked = todo.done ? "done": "";
-                         newTodo.title = todo.title;
-                         newTodo.id = todo.id;
-                     }
-                 });
-                 if(newTodo.done){
-                     list.todos = list.todos.filter(todo => todo.id !== id);
-                     list.todos.push(newTodo);
-                 }
-            }
-        })    
-        
-        listService.AllLists.save(this.listStore.lists);
+    checkTodo = (id: string, listId: string) => {      
+        this.listStore.lists.filter(list => list.id === listId)
+        .forEach(list=> { 
+            list.todos.filter(todo => todo.id === id)
+            .forEach((todo, index) => {
+                 todo.done = !todo.done;
+                 todo.checked = todo.done ? "done": "";
+                 if(todo.done)list.todos.push(...list.todos.splice(index,1));
+            });
+        })
+
+        listService.save(this.listStore.lists);
      }
 
     deleteTodo = (id: string, listId: string) => {
-        this.listStore.lists.forEach(list => {
-            if (list.id === listId) {
-                list.todos = list.todos.filter(todo => todo.id !== id);
-            }
-        });
-        listService.AllLists.save(this.listStore.lists);
+        this.listStore.lists.filter(list => list.id === listId)
+        .forEach(list=> { list.todos = list.todos.filter(todo => todo.id !== id);})
+
+        listService.save(this.listStore.lists);
     }
 
     addTodo = (listId: string) => {  
-
-        this.listStore.lists.forEach(list => {
-            if (list.id === listId) {
-                list.todos.push({
-                    id: Guid.create().toString(), 
-                    title: this.todoValue, 
-                    done: false, 
-                    checked: ""
-                });
-                this.todoValue = "";
-            }
-        });
-        listService.AllLists.save(this.listStore.lists);
+        this.listStore.lists.filter(list => list.id === listId)
+        .forEach(list=> { 
+            list.todos.push({
+                id: Guid.create().toString(), 
+                title: this.todoValue, 
+                done: false, 
+                checked: "",
+            });
+        })
+        this.todoValue = "";
+        
+        listService.save(this.listStore.lists);
     } 
 
-    editTodo = (id: string, listId: string) => {
-        this.listStore.lists.forEach(list => {
-            if (list.id === listId) {
-                this.todoId = id;
-                this.todoValue = list.todos.filter(todo => todo.id === id)[0].title;
-                this.editMode = true;
-            }
-        });
+    editTodoModeOn = (id: string, listId: string, title: string) => {
+        this.todoValue = title;
+        this.todoId = id;
+        this.editMode = true;
     }
 
-    editTodoValueSave = (listId: string) => {
-        this.listStore.lists.forEach(list => {
-        if (list.id === listId) {
-            list.todos.forEach(todo => 
-             {
-                 if(todo.id === this.todoId) {
-                    todo.title = this.todoValue;
-                    this.editMode = false;
-                }
-            });
-        }});
-        listService.AllLists.save(this.listStore.lists);
+    saveEditedTodo = (listId: string) => {
+        this.listStore.lists.filter(list => list.id === listId)
+        .forEach(list=> { 
+            list.todos.filter(todo => todo.id === this.todoId)
+             .forEach (todo => { todo.title = this.todoValue; });
+        });
+        this.todoValue = "";
+        this.editMode = false;
+
+        listService.save(this.listStore.lists);
     }
 
-    ValueChangeHandler = (event: any) => {
-        this.listStore.lists.forEach(list => {
-            if (list.id === event.target.id) {
-                this.todoValue = event.target.value;
-            }
-        });
+    valueOnChange = (value: string, listId: string) => {
+        this.listStore.lists.filter(list => list.id === listId)
+        .forEach(list => { this.todoValue = value; });
     }
 }

@@ -13,7 +13,7 @@ export default class ListStore {
  
     deleteList = (listId: string) => {
         this.lists = this.lists.filter(list => list.id !== listId);
-        listService.AllLists.save(this.lists);
+        listService.save(this.lists);
     }
 
     addList = () => {  
@@ -22,10 +22,10 @@ export default class ListStore {
             id: Guid.create().toString(), 
             title: "", 
             todos: [], });
-        listService.AllLists.save(this.lists);
+        listService.save(this.lists);
     }
 
     loadLists = () => {
-       // this.rootStore.lists = service.Lists.list();
+       // this.rootStore.lists = service.load();
     }
 }

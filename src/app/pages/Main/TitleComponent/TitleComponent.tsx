@@ -1,21 +1,10 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import Container from '@material-ui/core/Container';
-import { makeStyles } from '@material-ui/core/styles';
 import { TodoList } from "../../../common/models/TodoList";
 import AddTitleComponent from './AddTitleComponent'
 import { useStore } from '../../../stores/rootStore';
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        background: '#dbebeb',
-        display: 'flex',
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        marginBottom: '15px',
-        alignItems: 'center',
-    },
-  }));
+import { useStyles } from "../../../common/styles/styles"
 
 interface CProps {
     list: TodoList;
@@ -23,12 +12,19 @@ interface CProps {
 
 function TitleComponent({list} : CProps) {
     const classes = useStyles();
-    const { listStore} = useStore();
+    const { listStore, titleStore} = useStore();
 
     return (
-        <Container className={classes.root}>
+        <Container className={classes.titleCo}>
             <h2>{list.title}</h2>
-            {listStore.titleCreateMode && !list.title && <AddTitleComponent list={list}/>}
+            {listStore.titleCreateMode && !list.title && 
+            <AddTitleComponent 
+                list={list}
+                titleValue={titleStore.titleValue}
+                addTitle={titleStore.addTitle} 
+                valueOnChange={titleStore.valueOnChange}
+            />
+            }
         </Container>
     );
 }

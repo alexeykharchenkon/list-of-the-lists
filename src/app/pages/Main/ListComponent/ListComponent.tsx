@@ -1,55 +1,27 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { useStore } from '../../../stores/rootStore';
-import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
-import { TodoList } from "../../../common/models/TodoList";
 import TodoComponent from '../TodoComponent/TodoComponent'
 import TitleComponent from '../TitleComponent/TitleComponent'
+import { useStyles } from "../../../common/styles/styles"
+import { ListProps } from "../../../common/models/Props/ListProps";
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
-        background: '#efefef',
-        borderColor: '#000000',
-        borderRadius: 5,
-        padding: '15px 15px',
-        marginBottom: '15px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        flexDirection: 'column',
-    },
-    head: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        marginBottom: '30px',
-        alignItems: 'center',
-    },
-    up: {
-        display: 'flex',
-    },
-  }));
 
-interface CProps {
-    list: TodoList;
-}
-
-function ListComponent({list} : CProps) {
+function ListComponent({list, deleteList} : ListProps) {
     const classes = useStyles();
-    const { listStore} = useStore();
 
     return (
-        <Container className={classes.root}>
-            <Container className={classes.head}>
-                <Container className={classes.up}>
+        <Container className={classes.listCo}>
+            <Container className={classes.listCoHead}>
+                <Container className={classes.listCoUp}>
                     <h1>Todo List</h1>
                 </Container>
-                <Container className={classes.up}>
+                <Container className={classes.listCoUp}>
                     <Button
                         variant="contained"
                         color="secondary"
-                        onClick={() => listStore.deleteList(list.id)}
+                        onClick={() => deleteList(list.id)}
                      > Delete List </Button>
                 </Container> 
             </Container>

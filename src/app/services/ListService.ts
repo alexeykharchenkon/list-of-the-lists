@@ -5,13 +5,9 @@ const requests = {
     set: (lists: TodoList[]) => localStorage.setItem("lists", JSON.stringify(lists)),
 }
 
-const AllLists = {
-    list: () => requests.get(),
-    save: (lists: TodoList[]) => requests.set(lists)
-}
-
 const listService = {
-    AllLists
+    load: () => requests.get(),
+    save: (lists: TodoList[]) => requests.set(lists)
 }
 
 export default listService;

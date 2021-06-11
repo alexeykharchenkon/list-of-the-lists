@@ -12,20 +12,17 @@ export default class TitleStore {
     }
 
     addTitle = (listId: string) => {
-        this.listStore.lists.filter(list => list.id === listId).
-        forEach(list=> { list.title = this.titleValue;})
+        this.listStore.lists.filter(list => list.id === listId)
+        .forEach(list=> { list.title = this.titleValue; })
         
         this.listStore.titleCreateMode = false;
         this.titleValue = "";
 
-        listService.AllLists.save(this.listStore.lists);
+        listService.save(this.listStore.lists);
     }
 
-    ValueChangeHandler = (event: any) => {
-        this.listStore.lists.forEach(list => {
-            if (list.id === event.target.id) {
-                this.titleValue = event.target.value;
-            }
-        });
+    valueOnChange = (value: string, listId: string) => {
+        this.listStore.lists.filter(list => list.id === listId)
+        .forEach(list => { this.titleValue = value; });
     }
 }

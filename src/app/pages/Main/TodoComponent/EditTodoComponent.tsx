@@ -1,40 +1,25 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { useStore } from '../../../stores/rootStore';
-import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
-import { TodoList } from "../../../common/models/TodoList";
+import { TodoProps } from "../../../common/models/Props/TodoProps";
+import { useStyles } from "../../../common/styles/styles";
 
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-    },
-  }));
-
-  interface CProps {
-    list: TodoList;
-}
-
-function EditTodo({list} : CProps) {
-    const { todoStore} = useStore();
+function EditTodo({list, todoValue, addOrEditTodo, valueOnChange} : TodoProps) {
     const classes = useStyles();
 
     return (
-        <Container className={classes.root}>
+        <Container className={classes.addEditCo}>
             <TextField 
-                id={list.id}
-                value={todoStore.todoValue}
-                onChange={todoStore.ValueChangeHandler}
+                value={todoValue}
+                onChange={e => valueOnChange(e.target.value, list.id)}
             />
             <Button
                 variant="contained"
                 color="primary"
-                onClick={() => todoStore.editTodoValueSave(list.id)}
+                onClick={() => addOrEditTodo(list.id)}
             > Save </Button>      
         </Container>
     );
