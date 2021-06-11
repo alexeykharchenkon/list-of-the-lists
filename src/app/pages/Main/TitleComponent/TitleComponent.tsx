@@ -3,7 +3,7 @@ import React from 'react';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import { TodoList } from "../../../common/models/TodoList";
-import AddTitle from './AddTitle'
+import AddTitleComponent from './AddTitleComponent'
 import { useStore } from '../../../stores/rootStore';
 
 const useStyles = makeStyles((theme) => ({
@@ -28,7 +28,7 @@ function TitleComponent({list} : CProps) {
     return (
         <Container className={classes.root}>
             <h2>{list.title}</h2>
-            {listStore.titleCreateMode && !list.title && <AddTitle list={list}/>}
+            {listStore.titleCreateMode && !list.title && <AddTitleComponent list={list}/>}
         </Container>
     );
 }

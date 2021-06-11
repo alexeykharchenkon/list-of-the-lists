@@ -1,5 +1,4 @@
 import { makeAutoObservable } from "mobx";
-import { Todo} from "../common/models/Todo";
 import { TodoList } from "../common/models/TodoList";
 import { Guid } from "guid-typescript";
 import listService from '../services/ListService'
@@ -19,18 +18,10 @@ export default class ListStore {
 
     addList = () => {  
         this.titleCreateMode = true;
-
-        let todos : Todo[] = [];
-        let lists : TodoList[] = [];
-
-        let list1: TodoList = {
+        this.lists.unshift({
             id: Guid.create().toString(), 
             title: "", 
-            todos: todos, 
-        };
-
-        lists.push(list1);
-        this.lists = lists.concat(this.lists);
+            todos: [], });
         listService.AllLists.save(this.lists);
     }
 

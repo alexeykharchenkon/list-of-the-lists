@@ -15,12 +15,6 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
-    buttons: {
-        display: 'flex',
-    },
-    title: {
-        display: 'flex',
-    },
   }));
 
 interface CProps {

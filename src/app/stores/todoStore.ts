@@ -7,10 +7,9 @@ import listService from '../services/ListService'
 export default class TodoStore {
     listStore: ListStore;
 
-    addTodoValue = "";
-    editTodoValue = "";
+    todoValue = "";
     editMode = false;
-    editTodoId = "";
+    todoId = "";
     
     constructor(listStore: ListStore){
         this.listStore = listStore;
@@ -48,12 +47,17 @@ export default class TodoStore {
         listService.AllLists.save(this.listStore.lists);
     }
 
-    addTodo = (listId: string) => {
+    addTodo = (listId: string) => {  
+
         this.listStore.lists.forEach(list => {
             if (list.id === listId) {
-                let newTodo: Todo = {id: Guid.create().toString(), title: this.addTodoValue, done: false, checked: ""};
-                list.todos.push(newTodo);
-                this.addTodoValue = "";
+                list.todos.push({
+                    id: Guid.create().toString(), 
+                    title: this.todoValue, 
+                    done: false, 
+                    checked: ""
+                });
+                this.todoValue = "";
             }
         });
         listService.AllLists.save(this.listStore.lists);
@@ -62,43 +66,31 @@ export default class TodoStore {
     editTodo = (id: string, listId: string) => {
         this.listStore.lists.forEach(list => {
             if (list.id === listId) {
+                this.todoId = id;
+                this.todoValue = list.todos.filter(todo => todo.id === id)[0].title;
                 this.editMode = true;
-                this.editTodoId = id;
-                this.editTodoValue = list.todos.filter(todo => todo.id === id)[0].title;
             }
         });
-
-        this.editMode = true;
     }
 
     editTodoValueSave = (listId: string) => {
         this.listStore.lists.forEach(list => {
-            if (list.id === listId) {
-                list.todos.forEach(todo => 
-                    {
-                        if(todo.id === this.editTodoId) {
-                            todo.title = this.editTodoValue;
-                        }
-                    });
-                this.editMode = false;
-            }});
-            listService.AllLists.save(this.listStore.lists);
-
-            this.editMode = false;
+        if (list.id === listId) {
+            list.todos.forEach(todo => 
+             {
+                 if(todo.id === this.todoId) {
+                    todo.title = this.todoValue;
+                    this.editMode = false;
+                }
+            });
+        }});
+        listService.AllLists.save(this.listStore.lists);
     }
 
-    editTodoValueChange = (event: any) => {
+    ValueChangeHandler = (event: any) => {
         this.listStore.lists.forEach(list => {
             if (list.id === event.target.id) {
-                this.editTodoValue = event.target.value;
-            }
-        });
-    }
-
-    addTodoValueChange = (event: any) => {
-        this.listStore.lists.forEach(list => {
-            if (list.id === event.target.id) {
-                this.addTodoValue = event.target.value;
+                this.todoValue = event.target.value;
             }
         });
     }

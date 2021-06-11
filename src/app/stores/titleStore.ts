@@ -18,6 +18,7 @@ export default class TitleStore {
                 this.listStore.titleCreateMode = false;
             }
         });
+
         this.listStore.titleCreateMode = false;
         this.titleValue = "";
 

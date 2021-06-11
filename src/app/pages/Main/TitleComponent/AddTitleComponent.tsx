@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'space-between',
         flexDirection: 'row',
+        paddingTop: '10px',
         marginBottom: '15px',
         alignItems: 'center',
     },

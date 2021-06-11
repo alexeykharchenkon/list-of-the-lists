@@ -6,8 +6,8 @@ import Container from '@material-ui/core/Container';
 import { TodoList } from "../../../common/models/TodoList";
 import { List, ListItem} from '@material-ui/core';
 import TodoListComponent from './TodoListComponent'
-import EditTodo from './EditTodo'
-import AddTodo from './AddTodo'
+import EditTodoComponent from './EditTodoComponent'
+import AddTodoComponent from './AddTodoComponent'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -39,8 +39,8 @@ function TodoComponent({list} : CProps) {
     return (
         <Container className={classes.root}>
             <h2>List Todos</h2>
-            {!todoStore.editMode && <AddTodo list={list}/> }
-            {todoStore.editMode && <EditTodo list={list}/> }
+            {!todoStore.editMode && <AddTodoComponent list={list}/> }
+            {todoStore.editMode && <EditTodoComponent list={list}/> }
             <List className={classes.list}>
                 {list.todos.map(todo => {
                     return (

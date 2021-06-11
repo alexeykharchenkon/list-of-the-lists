@@ -1,24 +1,35 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useStore } from '../../../stores/rootStore';
+import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import { TodoList } from "../../../common/models/TodoList";
 
-interface CProps {
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+    },
+  }));
+
+  interface CProps {
     list: TodoList;
 }
 
 function EditTodo({list} : CProps) {
     const { todoStore} = useStore();
+    const classes = useStyles();
 
     return (
-        <Container>
+        <Container className={classes.root}>
             <TextField 
                 id={list.id}
-                value={todoStore.editTodoValue}
-                onChange={todoStore.editTodoValueChange}
+                value={todoStore.todoValue}
+                onChange={todoStore.ValueChangeHandler}
             />
             <Button
                 variant="contained"
