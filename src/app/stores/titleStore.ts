@@ -4,7 +4,8 @@ import ListStore from "./listStore";
 
 export default class TitleStore {
     listStore: ListStore;
-    titleValue = "";
+
+    titleValue: string = "";
 
     constructor(listStore: ListStore){
         this.listStore = listStore;
@@ -12,17 +13,13 @@ export default class TitleStore {
     }
 
     addTitle = (listId: string) => {
-        this.listStore.lists.filter(list => list.id === listId)
-        .forEach(list=> { list.title = this.titleValue; })
-        
+        this.listStore.lists.filter(list => list.id === listId)[0].title = this.titleValue;
         this.listStore.titleCreateMode = false;
         this.titleValue = "";
-
         listService.save(this.listStore.lists);
     }
 
-    valueOnChange = (value: string, listId: string) => {
-        this.listStore.lists.filter(list => list.id === listId)
-        .forEach(list => { this.titleValue = value; });
+    valueOnChange = (value: string) => {
+        this.titleValue = value;
     }
 }

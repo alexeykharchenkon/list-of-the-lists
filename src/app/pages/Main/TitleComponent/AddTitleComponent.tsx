@@ -14,7 +14,7 @@ function AddTitle({list, titleValue, addTitle, valueOnChange} : TitleProps) {
             <TextField 
                 label="Add List Title" 
                 value={titleValue}
-                onChange={e => valueOnChange(e.target.value, list.id)}
+                onChange={e => valueOnChange(e.target.value)}
             />
             <Button
                 variant="contained"

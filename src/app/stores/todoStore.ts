@@ -69,8 +69,7 @@ export default class TodoStore {
         listService.save(this.listStore.lists);
     }
 
-    valueOnChange = (value: string, listId: string) => {
-        this.listStore.lists.filter(list => list.id === listId)
-        .forEach(list => { this.todoValue = value; });
+    valueOnChange = (value: string) => {
+        this.todoValue = value;
     }
 }
